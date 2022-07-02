@@ -1,8 +1,15 @@
 #include <QQmlApplicationEngine>
 #include <QApplication>
 #include <QPushButton>
+#include <QQmlEngine>
+#include <QQmlComponent>
+#include <QSplashScreen>
+#include <QProgressDialog>
 #include <QProcess>
+#include <QWindow>
 #include <QString>
+#include <QLabel>
+#include <QImage>
 #include <QFile>
 #include <QDir>
 
@@ -33,16 +40,20 @@ void unrar(QString arg){
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    QPushButton b;
-    QProcess process;
+    QPixmap pixmap("/home/tubbadu/Immagini/Screenshot_20220207_222030.png");
+    QSplashScreen *splash = new QSplashScreen();
+    splash->show();
+
+    QQmlApplicationEngine engine;
     QString arg(argv[1]);
     QFile file(arg);
     QString cmd;
+
+
+
     //bool exists = QFile::exists("/home/pw/docs/file.txt");
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        b.setText("not exists");
     } else {
-        b.setText("exists");
         removeAllTmp();
         if(arg.endsWith(".cbz")){
             // unzip
@@ -57,10 +68,10 @@ int main(int argc, char *argv[])
 
 
 
-    /****** QML HERE ******/
-    //QGuiApplication app(argc, argv);
+    // close the loadin window
+    //loading.hide();
+    /****** QML HERE ******/ // open the 'real' window
 
-    QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
@@ -71,7 +82,7 @@ int main(int argc, char *argv[])
 
     return app.exec();
     /**********************/
-    //b.show();
+    //
     //return a.exec();
 }
 
