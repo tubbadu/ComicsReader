@@ -12,21 +12,27 @@
 #include <QImage>
 #include <QFile>
 #include <QDir>
+#include <unistd.h>
 
 void removeAllTmp(){
-    // create directory if not present
-    QProcess p;
-    p.start("touch", QStringList() << "/tmp/comicsReader/");
-    p.waitForFinished(-1);
 
-    // empty directory if already present and full
+
+    /*// empty directory if already present and full
     QDir dir("/tmp/comicsReader/");
     dir.setNameFilters(QStringList() << "*");
-    dir.setFilter(QDir::Files);
-    foreach(QString dirFile, dir.entryList())
+    //dir.setFilter(QDir::Files);
+
+    foreach(QString dirFile, dir.entryList()) // remove all files and empty dir
     {
         dir.remove(dirFile);
+        dir.rmdir(dirFile);
     }
+    foreach(QString dirFile, dir.entryList()) // remove all subdirectories
+    {
+        QDir subdir(dirFile);
+        subdir.removeRecursively();
+    }
+    dir.mkdir("/tmp/comicsReader/");*/
 }
 
 void unzip(QString arg){
@@ -37,10 +43,10 @@ void unzip(QString arg){
 }
 
 void unrar(QString arg){
-    QProcess p;
-    p.start("unrar", QStringList() << "e" << arg << "/tmp/comicsReader/");
+    /*QProcess p;
+    p.start("unrar", QStringList() << "x" << arg << "/tmp/comicsReader/");
     p.waitForFinished(-1);
-    return;
+    return;*/
 }
 
 void unpdf(QString arg){
@@ -59,7 +65,8 @@ int main(int argc, char *argv[])
     app.processEvents();
 
     QQmlApplicationEngine engine;
-    QString arg(argv[1]);
+    //QString arg(argv[1]);
+    QString arg("/home/tubbadu/Video/prova/DV #02 ATGP #01.cbr");
     QFile file(arg);
     QString cmd;
 
@@ -83,7 +90,7 @@ int main(int argc, char *argv[])
     }
 
 
-
+    sleep(1); // don't know why but sometimes it just doesn't load
     // close the loading window
     splash.hide();
     /****** QML HERE ******/ // open the 'real' window

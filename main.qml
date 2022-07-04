@@ -51,10 +51,21 @@ Window {
             FolderListModel{
                 id: folderModel
                 folder: "file:///tmp/comicsReader/"
-                nameFilters: [ "*.png", "*.jpg" ]
-                showDirs: false
+                //nameFilters: [ "*.png", "*.jpg" ]
+                showDirs: true
+                showFiles: false
                 Component.onCompleted:{
                     log.log("completed folderModel")
+                }
+                property var subdir: []
+                function getPaths(){
+                    folder = "file:///tmp/comicsReader/"
+                    showDirs = true
+                    showFiles = false
+                    
+                    for(let i=0; i<count; i++){
+                        subdir.append({"dir": get(i, "filePath")})
+                    }
                 }
             }
 
