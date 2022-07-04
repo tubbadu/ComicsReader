@@ -14,6 +14,12 @@
 #include <QDir>
 
 void removeAllTmp(){
+    // create directory if not present
+    QProcess p;
+    p.start("touch", QStringList() << "/tmp/comicsReader/");
+    p.waitForFinished(-1);
+
+    // empty directory if already present and full
     QDir dir("/tmp/comicsReader/");
     dir.setNameFilters(QStringList() << "*");
     dir.setFilter(QDir::Files);
@@ -37,9 +43,16 @@ void unrar(QString arg){
     return;
 }
 
+void unpdf(QString arg){
+    QProcess p;
+    p.start("pdftoppm", QStringList() << "-jpeg" << "-r" << "300" << arg << "/tmp/comicsReader/img");
+    p.waitForFinished(-1);
+    return;
+}
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    app.setWindowIcon(QIcon("/usr/share/icons/breeze/mimetypes/16/audiobook.svg"));
     QPixmap pixmap("/home/tubbadu/Immagini/Wallpapers/splashscreen.svg");
     QSplashScreen splash(pixmap);
     splash.show();
@@ -62,7 +75,9 @@ int main(int argc, char *argv[])
         } else if(arg.endsWith(".cbr")){
             // unrar
             unrar(arg);
-        } else {
+        } else if(arg.endsWith(".pdf")) {
+            unpdf(arg);
+        }else {
             // error
         }
     }
@@ -82,34 +97,4 @@ int main(int argc, char *argv[])
     engine.load(url);
 
     return app.exec();
-    /**********************/
-    //
-    //return a.exec();
 }
-
-
-
-/*
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-
-
-int main(int argc, char *argv[])
-{
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
-    QGuiApplication app(argc, argv);
-
-    QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url](QObject *obj, const QUrl &objUrl) {
-        if (!obj && url == objUrl)
-            QCoreApplication::exit(-1);
-    }, Qt::QueuedConnection);
-    engine.load(url);
-
-    return app.exec();
-}
-*/
