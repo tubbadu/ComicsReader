@@ -69,6 +69,11 @@ Window {
                 property int y1: 0
                 property int index: 0
 
+                anchors.fill: parent
+                touchPoints: [
+                    TouchPoint { id: point1 }
+                ]
+
                 function goRight(amount=1){
                     if (folderModel.count > 0){
                         // pages loaded
@@ -98,18 +103,18 @@ Window {
                 }
 
                 function toggleFullscreen(){
-                    toolbar.visible = !toolbar.visible
+                    //toolbar.visible = !toolbar.visible
+
                     if(window.visibility === 5){
                         window.visibility = "Windowed"
+                        topbar.y = 0
+                        touchTopbar.y = topbar.y + topbar.height - touchTopbar.height/2
                     } else {
                         window.visibility = "FullScreen"
+                        topbar.y = -topbar.height
+                        touchTopbar.y = topbar.y + topbar.height - touchTopbar.height/2
                     }
                 }
-
-                anchors.fill: parent
-                touchPoints: [
-                    TouchPoint { id: point1 }
-                ]
 
                 Timer{
                     id: tripleClickTimer
@@ -186,59 +191,111 @@ Window {
             Column {
                 anchors.fill: parent
                 id: gui
-                RowLayout {
-                    //anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.right: parent.right
-                    anchors.left: parent.left
-                    spacing: 10
-                    id: toolbar
-                    visible: true
-                    z: 1000
-                    Button{
-                        anchors.left: parent.left
-                        id: m10
-                        text: "-10"
-                        onClicked: {
-                            //fileDialog.open()
-                            touch.goRight(10)
+                MultiPointTouchArea{
+                    id: touchTopbar
+                    width: parent.width
+                    height: 10
+                    y: 0
+                    //anchors.top: gui.top
+                    touchPoints: [
+                        TouchPoint { id: p }
+                    ]
+                    property int exPy: 0
+
+                    onPressed: {
+                        exPy = p.y
+                    }
+                    onReleased: {
+                        if(topbar.y < 0){
+                            topbar.y = - topbar.height // close
+                            // TODO add animation
+                        } else {
+                            topbar.y = 0
+                        }
+                        touchTopbar.y = topbar.y + topbar.height - touchTopbar.height/2
+                    }
+                    onUpdated: {
+                        if(p.y - topbar.height + touchTopbar.y < 0){
+                            topbar.y = p.y - topbar.height + touchTopbar.y
+                        } else {
+                            topbar.y = 0
                         }
                     }
-                    RowLayout{
-                        spacing: 5
+                }
+                Rectangle{
+                    id: topbar
+                    color: "white"
+                    width: parent.width
+                    height: toolbar.height + 10
+                    y: -height
+                    z: -1
+                    Component.onCompleted: {
+                        color.a = 0.1
+
+                        // open topbar
+                        topbar.y = 0
+                        touchTopbar.y = topbar.y + topbar.height - touchTopbar.height/2
+                    }
+
+
+                    RowLayout {
+                        id: toolbar
+                        //anchors.right: parent.right
+                        //anchors.left: parent.left
+                        width: parent.width - 10
                         anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 10
+
+                        visible: true
+                        z: 1000
+                        //y: -height
                         Button{
-                            id: fullscreen
-                            //anchors.right: parent.horizontalCenter
-                            text: "fullscreen"
+                            anchors.left: parent.left
+                            id: m10
+                            text: "-10"
                             onClicked: {
-                                touch.toggleFullscreen()
+                                //fileDialog.open()
+                                touch.goRight(10)
                             }
                         }
-                        Button{
-                            id: rotation
-                            //anchors.horizontalCenter: parent.horizontalCenter
-                            text: "rotate"
-                            onClicked: {
-                                root.toggleRotate()
+                        RowLayout{
+                            spacing: 5
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            Button{
+                                id: fullscreen
+                                //anchors.right: parent.horizontalCenter
+                                text: "fullscreen"
+                                onClicked: {
+                                    touch.toggleFullscreen()
+                                }
+                            }
+                            Button{
+                                id: rotation
+                                //anchors.horizontalCenter: parent.horizontalCenter
+                                text: "rotate"
+                                onClicked: {
+                                    root.toggleRotate()
+                                }
                             }
                         }
-                    }
 
 
-                    Button{
-                        id: p10
-                        anchors.right: parent.right
-                        text: "+10"
-                        onClicked: {
-                            //fileDialog.open()
-                           touch.goLeft(10)
+                        Button{
+                            id: p10
+                            anchors.right: parent.right
+                            text: "+10"
+                            onClicked: {
+                                //fileDialog.open()
+                               touch.goLeft(10)
+                            }
                         }
-                    }
-                    TextArea{
-                        id: clip
-                        visible: !true
-                    }
+                        TextArea{
+                            id: clip
+                            visible: !true
+                        }
 
+                    }
                 }
                 Text{
                       id: pageNum

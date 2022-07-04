@@ -40,9 +40,10 @@ void unrar(QString arg){
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    QPixmap pixmap("/home/tubbadu/Immagini/Screenshot_20220207_222030.png");
-    QSplashScreen *splash = new QSplashScreen();
-    splash->show();
+    QPixmap pixmap("/home/tubbadu/Immagini/Wallpapers/splashscreen.svg");
+    QSplashScreen splash(pixmap);
+    splash.show();
+    app.processEvents();
 
     QQmlApplicationEngine engine;
     QString arg(argv[1]);
@@ -68,8 +69,8 @@ int main(int argc, char *argv[])
 
 
 
-    // close the loadin window
-    //loading.hide();
+    // close the loading window
+    splash.hide();
     /****** QML HERE ******/ // open the 'real' window
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
