@@ -14,25 +14,28 @@
 #include <QDir>
 #include <unistd.h>
 
+void clearDir( const QString path )
+{
+    QDir dir( path );
+
+    dir.setFilter( QDir::NoDotAndDotDot | QDir::Files );
+    foreach( QString dirItem, dir.entryList() )
+        dir.remove( dirItem );
+
+    dir.setFilter( QDir::NoDotAndDotDot | QDir::Dirs );
+    foreach( QString dirItem, dir.entryList() )
+    {
+        QDir subDir( dir.absoluteFilePath( dirItem ) );
+        subDir.removeRecursively();
+    }
+
+    // added by me: create if not present
+    dir.mkdir("/tmp/comicsReader/");
+}
+
 void removeAllTmp(){
+clearDir("/tmp/comicsReader/");
 
-
-    /*// empty directory if already present and full
-    QDir dir("/tmp/comicsReader/");
-    dir.setNameFilters(QStringList() << "*");
-    //dir.setFilter(QDir::Files);
-
-    foreach(QString dirFile, dir.entryList()) // remove all files and empty dir
-    {
-        dir.remove(dirFile);
-        dir.rmdir(dirFile);
-    }
-    foreach(QString dirFile, dir.entryList()) // remove all subdirectories
-    {
-        QDir subdir(dirFile);
-        subdir.removeRecursively();
-    }
-    dir.mkdir("/tmp/comicsReader/");*/
 }
 
 void unzip(QString arg){
@@ -43,10 +46,10 @@ void unzip(QString arg){
 }
 
 void unrar(QString arg){
-    /*QProcess p;
+    QProcess p;
     p.start("unrar", QStringList() << "x" << arg << "/tmp/comicsReader/");
     p.waitForFinished(-1);
-    return;*/
+    return;
 }
 
 void unpdf(QString arg){
