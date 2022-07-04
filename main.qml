@@ -25,31 +25,37 @@ Window {
             }
 
             property var imgs: []
+            property var files: []
+            property var subdirs: []
             property int index: 0
+            property int subdirsIndex: 0
 
             function goRight(amount=1){
+                console.log("go right")
                 if (index - amount > -1){
                     index -= amount
                 } else {
                     index = 0
                 }
-                img.source = "file://" + imgs[index]
+                img.source = "file://" + files[index]["url"]
                 pageNum.display()
             }
 
             function goLeft(amount=1){
-                if (index + amount < imgs.length){
+                console.log("go left")
+                if (index + amount < files.length){
                     index += amount
                 } else {
-                    index = imgs.length - 1
+                    index = files.length - 1
                 }
-                img.source = "file://" + imgs[index]
+                img.source = "file://" + files[index]["url"]
                 pageNum.display()
             }
 
             function goTo(i){
                 index = i
-                img.source = "file://" + imgs[index]
+                console.log("go to")
+                img.source = "file://" + files[index]["url"]
                 pageNum.display()
             }
 
@@ -86,19 +92,47 @@ Window {
                         id: dioFolder
                         property bool loading: (dioFolder.status === FolderListModel.Ready)
                         folder: "file://" + dir
-                        showDirs: false
+                        showDirs: true
                         showFiles: true
                         nameFilters: [ "*.png", "*.jpg" ]
                         onLoadingChanged: {
                             if(loading){
-                                console.log("scanning: " + folder)
-                                lView.append(searchFolder.get(searchFolder.ii, "fileName"), "noUrl", root.imgs.length, false)
-                                for(let i=0; i<count; i++){
-                                    console.log(get(i, "filePath"))
-                                    lView.append((searchFolder.ii + 1) + "." + (i + 1), get(i, "filePath"), root.imgs.length, true)
-                                    root.imgs.push(get(i, "filePath"))
+                                log.log(dir)
+                                if(first){
+                                    log.log("it's the first! scanning " + dir)
+                                    for(let i=0; i<count; i++){
+                                        if(isFolder(i)){
+                                            // do all long stuffs
+                                            //dirList.push(get(i, "filePath"))
+                                            root.subdirs.push(get(i, "filePath"))
+                                        } else {
+                                            //classic, all imgs are here
+                                            lView.append(i + 1, root.files.length, true)
+                                            root.files.push({"index": i, "relIndex": i, "url": get(i, "filePath")})
+                                            log.log("debug 3:" + root.files[0]["url"])
+                                            img.source = "file://" + root.files[0]["url"]
+                                        }
+                                    }
+                                    root.subdirsIndex = 0
+                                    dioModel.model.append({"dir": root.subdirs[root.subdirsIndex], "first": false})
+                                    //log.log("appended: " + root.subdirs[root.subdirsIndex])
+                                } else {
+                                    let iii = root.files.length
+                                    lView.append(dir.replace(/^.*[\\\/]/, ''), iii, false) // change dir in just dirname
+                                    for(let i=0; i<count; i++){
+                                        //log.log(get(i, "filePath"))
+                                        lView.append((iii + 1) + "." + (i + 1), root.files.length, true)
+                                        root.files.push({"index": root.files.length, "relIndex": i, "url": get(i, "filePath")})
+                                    }
+                                    root.subdirsIndex++
+                                    if(root.subdirsIndex < root.subdirs.length){
+                                        dioModel.model.append({"dir": root.subdirs[root.subdirsIndex], "first": false})
+                                    } else {
+                                        // finitoooooo
+                                        log.log("debug 1:" + root.files[0]["url"])
+                                        img.source = "file://" + root.files[0]["url"]
+                                    }
                                 }
-                                searchFolder.next()
                             }
                         }
                     }
@@ -106,62 +140,46 @@ Window {
             }
             ListView{
                 model: dioModel
+                visible: false
             }
-
-            FolderListModel{
-                id: fisrtFolder
-                folder: "file:///tmp/comicsReader/"
-                showDirs: true
-                showFiles: false
-                property bool loading: (searchFolder.status === FolderListModel.Ready)
-
-                onLoadingChanged: {
-                    console.log("loaded")
-                    if(loading){
-                        if(count > 0){
-                            //multiple chapters
-                            searchFolder.folder = "file://" + get(0, "filePath")
-                        } else {
-                            // single chapter
-                            showFiles = true
-                            console.log(count)
-                            for(let i=0; i<count; i++){
-                                console.log(get(i, "filePath"))
-                            }
-                        }
-
-
-                    }
-                }
-
-            }
-
 
             FolderListModel{
                 id: searchFolder
-                //folder: "file:///tmp/comicsReader/"
+                folder: "file:///tmp/comicsReader/"
                 showDirs: true
-                showFiles: false
-                property int ii: 0
+                showFiles: true
                 property bool loading: (searchFolder.status === FolderListModel.Ready)
+                property var dirList: []
+                property int ii: 0
+
 
                 onLoadingChanged: {
-                    console.log("loaded")
                     if(loading){
-                        searchFolder.ii = -1
-                        next()
-                    }
-                }
-
-                function next(){
-                    ii++
-                    if(ii < count){
-                        dioModel.model.append({"dir": get(ii, "filePath")})
-                    } else {
-                        console.log("we finished!")
-                        // display here first image
-                        root.index = 0
-                        img.source = "file://" + root.imgs[root.index]
+                        let real_i = 0
+                        for(let i=0; i<count; i++){
+                            //log.log(get(i, "filePath") + "is folder?" + isFolder(i))
+                            if(isFolder(i)){
+                                // do all long stuffs
+                                dirList.push(get(i, "filePath"))
+                            } else {
+                                //classic, all imgs are here
+                                if(get(i, "fileSuffix") === "jpg" || get(i, "fileSuffix") === "jpeg" || get(i, "fileSuffix") === "png"){ // TODO make it better it's horrific // exclude xml and other shit
+                                    lView.append(real_i + 1, root.files.length, true)
+                                    root.files.push({"index": real_i, "relIndex": real_i, "url": get(i, "filePath")})
+                                    real_i++
+                                } else {
+                                }
+                            }
+                        }
+                        ii = 0
+                        // call now the other file explorer
+                        if(dirList.length > 0){
+                            log.log(dirList[0])
+                            dioModel.model.append({"dir": dirList[ii], "first": true}) // TODO iterate for each element in dirlist
+                        } else {
+                            log.log("debug 2:" + root.files[0]["url"])
+                            img.source = "file://" + root.files[0]["url"]
+                        }
                     }
                 }
             }
@@ -170,7 +188,7 @@ Window {
                 id: log
                 anchors.fill: parent
                 visible: !true
-                color: "black"
+                color: "red"
                 z: 99999
                 text: "console log here"
 
@@ -216,7 +234,7 @@ Window {
                         id: topbar
                         color: "white"
                         width: parent.width
-                        height: toolbar.height + 10
+                        height: p10.height + 10
                         y: -height
                         z: 100
                         Component.onCompleted: {
@@ -227,53 +245,40 @@ Window {
                             touchTopbar.y = topbar.y + topbar.height - touchTopbar.height/2
                         }
 
-                        RowLayout {
-                            id: toolbar
-                            width: parent.width - 10
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            spacing: 10
-                            visible: true
-                            z: 1000
-                            //y: -height
-                            Button{
-                                //anchors.left: parent.left
-                                id: m10
-                                text: "-10"
-                                onClicked: {
-                                    root.goRight(10)
-                                }
+                        Button{
+                            anchors.left: parent.left
+                            id: m10
+                            text: "-10"
+                            y: 5
+                            onClicked: {
+                                root.goRight(10)
                             }
-                            RowLayout{
-                                spacing: 5
-                                anchors.horizontalCenter: parent.horizontalCenter // TODO change (it's not perfectly centered)
-                                Button{
-                                    id: fullscreen
-                                    //anchors.right: parent.horizontalCenter
-                                    text: "fullscreen"
-                                    onClicked: {
-                                        root.toggleFullscreen()
-                                    }
-                                }
-                                Button{
-                                    id: rotation
-                                    text: "rotate"
-                                    onClicked: {
-                                        root.toggleRotate()
-                                    }
-                                }
+                        }
+                        Button{
+                            id: fullscreen
+                            anchors.right: parent.horizontalCenter
+                            y: 5
+                            text: "fullscreen"
+                            onClicked: {
+                                root.toggleFullscreen()
                             }
-                            Button{
-                                id: p10
-                                anchors.right: parent.right
-                                text: "+10"
-                                onClicked: {
-                                   root.goLeft(10)
-                                }
+                        }
+                        Button{
+                            id: rotation
+                            anchors.left: parent.horizontalCenter
+                            y: 5
+                            text: "rotate"
+                            onClicked: {
+                                root.toggleRotate()
                             }
-                            TextArea{
-                                id: clip
-                                visible: !true
+                        }
+                        Button{
+                            id: p10
+                            anchors.right: parent.right
+                            y: 5
+                            text: "+10"
+                            onClicked: {
+                               root.goLeft(10)
                             }
                         }
                     }
@@ -360,8 +365,8 @@ Window {
                             height: parent.height - 10
                             width: parent.width - 10
 
-                            function append(name, url, pos, isFile=true){ // just a shorter way to do it
-                                lModel.model.append({"name": name, "url": url, "pos": pos, "isFile": isFile})
+                            function append(name, pos, isFile=true){ // just a shorter way to do it
+                                lModel.model.append({"name": name, "pos": pos, "isFile": isFile})
                             }
                         }
                     }
@@ -380,7 +385,7 @@ Window {
                       text: "0/0"
 
                       function display(){
-                        text = (root.index+1) + "/" + root.imgs.length
+                        text = (root.index+1) + "/" + root.files.length
                         visible = true
                         fadeNum.restart()
                       }
@@ -399,8 +404,8 @@ Window {
 
                 Image{
                     id: img
+                   // source: "file:///home/tubbadu/Immagini/Screenshot_20220207_222030.png"
                     anchors.fill: parent
-
                     fillMode: Image.PreserveAspectFit
                     z: -1
 
@@ -412,7 +417,7 @@ Window {
                         color: "white"
                         font.pixelSize: 22
                         horizontalAlignment: Text.AlignHCenter
-                        text: "# Comic Reader fico! \n\n click '**open file**' to select a CBZ or CBR file to read  \nand '**fullscreen**' to enter fullscreen!" // TODO change!
+                        text: "# Cool Comic Reader! \n\n swipe on the screen to change page  \nswipe from the top or left screen edge to show or hide the toolbars  \n '**fullscreen**' or triple clicking toggles fullscreen mode  \n '**rotate**' rotates the orientation of the screen (useful when the OS's automatic rotation is naughty)  \n '**+10**' or '**-10**' skips 10 pages at once"
                         z: -2
                     }
 

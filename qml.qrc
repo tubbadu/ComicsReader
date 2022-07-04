@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>splashscreen.svg</file>
     </qresource>
 </RCC>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="148mm"
+   height="105mm"
+   viewBox="0 0 148 105"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   sodipodi:docname="splashscreen.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="4"
+     inkscape:cx="100.125"
+     inkscape:cy="-274"
+     inkscape:window-width="1880"
+     inkscape:window-height="1051"
+     inkscape:window-x="40"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Livello 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#2a2e32;fill-rule:evenodd;stroke:none;stroke-width:5.29201;stroke-linecap:round;stroke-miterlimit:20.5;paint-order:markers fill stroke;fill-opacity:1"
+       id="rect253"
+       width="147.99902"
+       height="104.99879"
+       x="0.00090690871"
+       y="0.00090690865"
+       ry="0.1550293" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:19.7556px;font-family:Impact;-inkscape-font-specification:'Impact Bold';text-align:center;text-anchor:middle;fill:#32322a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:5.29201;stroke-linecap:round;stroke-miterlimit:20.5;paint-order:markers fill stroke"
+       x="73.825592"
+       y="53.7201"
+       id="text2526"><tspan
+         sodipodi:role="line"
+         id="tspan2524"
+         style="font-size:15.875px;fill:#eaebc5;fill-opacity:1;stroke-width:5.292"
+         x="73.825592"
+         y="53.7201">LOADING COMICS FILE</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:19.7556px;fill:#eaebc5;fill-opacity:1;stroke-width:5.292"
+         x="73.825592"
+         y="78.414604"
+         id="tspan2682" /></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:25.4px;font-family:Impact;-inkscape-font-specification:'Impact Bold';text-align:center;text-anchor:middle;fill:#eaebc5;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:5.29201;stroke-linecap:round;stroke-miterlimit:20.5;paint-order:markers fill stroke"
+       x="73.708542"
+       y="90.801247"
+       id="text2686"><tspan
+         sodipodi:role="line"
+         id="tspan2684"
+         style="font-size:25.4px;stroke-width:5.292"
+         x="73.708542"
+         y="90.801247">PLEASE WAIT!</tspan></text>
+    <path
+       id="path3692"
+       style="color:#000000;fill:#ff3a3a;fill-rule:evenodd;stroke-linecap:round;stroke-miterlimit:20.5;paint-order:markers fill stroke"
+       d="M 19.699056 -90.69834 C 15.725857 -90.219351 12.11439 -88.925821 9.1834188 -86.959033 C 5.4118869 -84.428199 2.6365316 -80.528076 2.6365316 -75.957121 C 2.6365316 -71.386166 5.4118869 -67.486043 9.1834188 -64.955208 C 12.11439 -62.98842 15.725857 -61.695915 19.699056 -61.217452 L 19.699056 -68.298674 C 17.069361 -68.735792 14.772218 -69.636439 13.083956 -70.769324 C 10.680404 -72.382194 9.636621 -74.204996 9.6366211 -75.957121 C 9.6366211 -77.709247 10.680404 -79.533598 13.083956 -81.146468 C 14.772222 -82.279356 17.069354 -83.180517 19.699056 -83.617635 L 19.699056 -90.69834 z M 26.699146 -90.69834 L 26.699146 -83.617635 C 29.328115 -83.180493 31.624511 -82.279301 33.312695 -81.146468 C 35.716247 -79.533598 36.759513 -77.709247 36.759513 -75.957121 C 36.759513 -74.204996 35.716247 -72.382194 33.312695 -70.769324 C 31.624515 -69.636494 29.328107 -68.735816 26.699146 -68.298674 L 26.699146 -61.217452 C 30.671818 -61.695915 34.281744 -62.98842 37.212716 -64.955208 C 40.984247 -67.486043 43.759603 -71.386166 43.759603 -75.957121 C 43.759603 -80.528076 40.984247 -84.428199 37.212716 -86.959033 C 34.281744 -88.925821 30.671818 -90.219351 26.699146 -90.69834 z " />
+    <path
+       style="color:#000000;fill:#ff3a3a;fill-rule:evenodd;stroke-linecap:round;stroke-miterlimit:20.5;paint-order:markers fill stroke"
+       d="m 23.199219,-89.675781 a 3.5,3.5 0 0 0 -3.5,3.5 v 20.435547 a 3.5,3.5 0 0 0 3.5,3.5 3.5,3.5 0 0 0 3.5,-3.5 v -20.435547 a 3.5,3.5 0 0 0 -3.5,-3.5 z"
+       id="path3626" />
+  </g>
+</svg>

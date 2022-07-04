@@ -34,8 +34,7 @@ void clearDir( const QString path )
 }
 
 void removeAllTmp(){
-clearDir("/tmp/comicsReader/");
-
+    clearDir("/tmp/comicsReader/");
 }
 
 void unzip(QString arg){
@@ -62,14 +61,15 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     app.setWindowIcon(QIcon("/usr/share/icons/breeze/mimetypes/16/audiobook.svg"));
-    QPixmap pixmap("/home/tubbadu/Immagini/Wallpapers/splashscreen.svg");
+    QPixmap pixmap(":/splashscreen.svg");
     QSplashScreen splash(pixmap);
     splash.show();
     app.processEvents();
 
     QQmlApplicationEngine engine;
-    //QString arg(argv[1]);
-    QString arg("/home/tubbadu/Video/prova/DV #02 ATGP #01.cbr");
+    QString arg(argv[1]);
+    //QString arg("/home/tubbadu/Video/Darth Vader/DV #02 And The Ghost Prison/DV #02 ATGP #01.cbr");
+   // arg = "/home/tubbadu/Video/prova/The Junji Ito Horror Collection - Volume 01.cbr";
     QFile file(arg);
     QString cmd;
 
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     }
 
 
-    sleep(1); // don't know why but sometimes it just doesn't load
+    sleep(0.5); // don't know why but sometimes it just doesn't load
     // close the loading window
     splash.hide();
     /****** QML HERE ******/ // open the 'real' window
