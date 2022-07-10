@@ -1,3 +1,9 @@
+# !!! deprecated !!!
+
+## I have rewritten this using the Kirigami frameswork [here](https://github.com/tubbadu/KomicsReader)
+
+----
+
 # ComicsReader
 
 a simple, Qt based, touchscreen oriented *Comics Reader* (.cbr and .cbz)
